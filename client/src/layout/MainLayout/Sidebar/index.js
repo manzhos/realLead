@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 
 // material-ui
@@ -13,6 +14,7 @@ import MenuList from './MenuList';
 import LogoSection from '../LogoSection';
 // import MenuCard from './MenuCard';
 import { drawerWidth } from 'store/constant';
+import { textAlign } from '@mui/system';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -23,7 +25,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
   const drawer = (
     <>
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-        <Box sx={{ display: 'flex', p: 2, mx: 'auto' }}>
+        <Box>
           <LogoSection />
         </Box>
       </Box>

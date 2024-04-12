@@ -1,5 +1,6 @@
+import React from 'react';
 // material-ui
-import { Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 
 // project imports
 import NavGroup from './NavGroup';
@@ -21,7 +22,12 @@ const MenuList = () => {
     }
   });
 
-  return <>{navItems}</>;
+  return (
+    <>
+      <Divider sx={{ mt: 2, mb: 1.25 }} />
+      {navItems}
+    </>
+  )
 };
 
 export default MenuList;

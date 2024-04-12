@@ -1,4 +1,4 @@
-import dashboard from './dashboard';
+// import dashboard from './dashboard';
 import pages from './pages';
 import utilities from './utilities';
 import other from './other';
@@ -7,7 +7,7 @@ import other from './other';
 
 const menuItems = {
   // items: [dashboard, pages, utilities, other]
-  items: [dashboard, other]
+  items: [other]
 };
 
 export default menuItems;

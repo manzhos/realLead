@@ -1,8 +1,8 @@
-import { lazy } from 'react';
+import React, { lazy } from 'react';
 
 // project imports
-import MainLayout from 'layout/MainLayout';
-import Loadable from 'ui-component/Loadable';
+import MainLayout from '../layout/MainLayout';
+import Loadable from '../ui-component/Loadable';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -26,62 +26,63 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <DashboardDefault />
+      // element: <DashboardDefault />
+      element: <Projects />
     },
-    {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'default',
-          element: <DashboardDefault />
-        }
-      ]
-    },
-    {
-      path: 'utils',
-      children: [
-        {
-          path: 'util-typography',
-          element: <UtilsTypography />
-        }
-      ]
-    },
-    {
-      path: 'utils',
-      children: [
-        {
-          path: 'util-color',
-          element: <UtilsColor />
-        }
-      ]
-    },
-    {
-      path: 'utils',
-      children: [
-        {
-          path: 'util-shadow',
-          element: <UtilsShadow />
-        }
-      ]
-    },
-    {
-      path: 'icons',
-      children: [
-        {
-          path: 'tabler-icons',
-          element: <UtilsTablerIcons />
-        }
-      ]
-    },
-    {
-      path: 'icons',
-      children: [
-        {
-          path: 'material-icons',
-          element: <UtilsMaterialIcons />
-        }
-      ]
-    },
+    // {
+    //   path: 'dashboard',
+    //   children: [
+    //     {
+    //       path: 'default',
+    //       element: <DashboardDefault />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'utils',
+    //   children: [
+    //     {
+    //       path: 'util-typography',
+    //       element: <UtilsTypography />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'utils',
+    //   children: [
+    //     {
+    //       path: 'util-color',
+    //       element: <UtilsColor />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'utils',
+    //   children: [
+    //     {
+    //       path: 'util-shadow',
+    //       element: <UtilsShadow />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'icons',
+    //   children: [
+    //     {
+    //       path: 'tabler-icons',
+    //       element: <UtilsTablerIcons />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'icons',
+    //   children: [
+    //     {
+    //       path: 'material-icons',
+    //       element: <UtilsMaterialIcons />
+    //     }
+    //   ]
+    // },
     {
       path: 'projects',
       element: <Projects />

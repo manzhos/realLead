@@ -30,13 +30,12 @@ import config from 'config.js'
 // ==============================|| PROJECT PAGE ||============================== //
 
 const TABLE_HEAD = [
-  // { id: 'id', label: 'ID', alignRight: false },
-  { id: 'name',     label: 'Name',    alignRight: false },
-  { id: 'created',  label: 'Created', alignRight: false },
+  { id: 'name',     label: 'Name',      alignRight: false },
+  { id: 'created',  label: 'Created',   alignRight: false },
+  { id: 'click',    label: 'CLICK\'s',  alignRight: false },
 ];
 
 const TABLE_SUB_HEAD = [
-  // { id: 'id', label: 'ID', alignRight: false },
   { id: 'name',      label: 'Name',             alignRight: false },
   { id: 'linkFrom',  label: 'Link for posting', alignRight: false, width: '320px', },
   { id: 'linkTo',    label: 'Target link',      alignRight: false },
@@ -58,7 +57,7 @@ const Projects = () => {
       const res = await request(`${API_URL}/project`, 'GET', null,
         {Authorization: `Bearer ${auth.token}`}
       )
-      // console.log('projects:', res.projects)
+      console.log('projects:', res.projects)
       setProjectList(res.projects)
     } catch(error) { console.log('Error:', error)}
   })
