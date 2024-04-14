@@ -7,12 +7,12 @@ const config = {
   borderRadius: 12,
 
   // dev
-  API_URL: 'http://localhost:3300/api',
-  URL: 'http://localhost:3000',
+  // API_URL: 'http://localhost:3300/api',
+  // URL: 'http://localhost:3000',
   
   //production
-  // API_URL: 'http://',
-  // URL:     'http://',
+  API_URL: 'http://65.109.227.66/',
+  URL:     'http://65.109.227.66/',
 };
 
 export default config;
