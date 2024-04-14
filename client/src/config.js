@@ -11,8 +11,8 @@ const config = {
   // URL: 'http://localhost:3000',
   
   //production
-  API_URL: 'http://65.109.227.66/',
-  URL:     'http://65.109.227.66/',
+  API_URL: 'http://65.109.227.66/api',
+  URL:     'http://65.109.227.66',
 };
 
 export default config;
