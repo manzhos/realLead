@@ -144,7 +144,7 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
     const handleRowClick = (data) => {
       console.log('copied:', data)
       if(parent !== 'project') {
-        navigator.clipboard.writeText(data)
+        navigator.clipboard.writeText(`'${data}'`)
         toast("Link copied to clipboard", {
           position: "top-right",
           autoClose: 5000,
