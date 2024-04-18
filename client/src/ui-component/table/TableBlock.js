@@ -134,7 +134,7 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
   }
 
   const Row = ({row, index}) => {
-    // console.log('row:', row)
+    console.log('row:', row)
     const [openSub, setOpenSub] = useState(false)
     // const isItemSelected = selected.indexOf(index) !== -1;
     const [filterName, setFilterName] = useState('')
