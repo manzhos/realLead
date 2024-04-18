@@ -13,7 +13,7 @@ import ChannelRoute from './routes/channel.routes.js'
 const app = express()
 const PORT = process.env.PORT || 3300;
 
-app.use(cors());
+app.use(cors({origin:true}));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
 app.use(bodyParser.urlencoded({ extended: true }));
