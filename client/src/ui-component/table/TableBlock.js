@@ -142,9 +142,9 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
     if(subItem?.itemList?.length) filteredSubItems = applySortFilter(subItem.itemList, getComparator(order, orderBy), filterName)
 
     const handleRowClick = (data) => {
+      console.log('copied:', data)
       if(parent !== 'project') {
         navigator.clipboard.writeText(data)
-        console.log('copied:', data)
         toast("Link copied to clipboard", {
           position: "top-right",
           autoClose: 5000,
