@@ -47,7 +47,7 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
       const res = await request(`${API_URL}/channels/${parentId}`, 'GET', null,
         {Authorization: `Bearer ${auth.token}`}
       )
-      // console.log('projects:', res.projects)
+      // console.log('channels:', res)
       setChannelList(res.channels)
     } catch(error) { console.log('Error:', error)}
   })
@@ -55,7 +55,7 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
 
   const createChannel = async(event) => {
     event.preventDefault()
-    console.log('newChannelData:', newChannelData)
+    // console.log('newChannelData:', newChannelData)
     try {
       const response = await request(`${API_URL}/channel`, 'POST', newChannelData,
         { Authorization: `Bearer ${auth.token}` }
@@ -85,6 +85,10 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
   const generateLinkFrom = () => {
     if(!newChannelData.linkTo || newChannelData.linkTo === '') return
     const channelId = Date.now();
+    // check redirect for 'http://' || 'https://'. Without it redirect like additional to local path
+    const linkRegex = /^htt([p,ps]):\/\//;
+    if(!linkRegex.test(newChannelData.linkTo)) newChannelData.linkTo = 'https://' + newChannelData.linkTo
+    // console.log('newChannelData.linkTo', newChannelData.linkTo)
     const linkFrom = `${API_URL}/getfrom?user_id=${auth.userId._id}&project_id=${parentId}&channel_id=${channelId}`
     setNewChannelData({
       ...newChannelData,

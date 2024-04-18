@@ -5,6 +5,10 @@ import humanDate from 'utils/human-date'
 import SubMenu from './SubMenu'
 import SubItemBlock from 'ui-component/table/SubItemBlock'
 
+// for toast messages
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { 
   Container,
   Box,
@@ -139,8 +143,18 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
 
     const handleRowClick = (data) => {
       if(parent !== 'project') {
-        navigator.clipboard.writeText(data);
+        navigator.clipboard.writeText(data)
         console.log('copied:', data)
+        toast("Link copied to clipboard", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
         return
       }
       setOpenSub(!openSub)
@@ -203,6 +217,7 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
 
   return (
     <Card>
+      <ToastContainer />
       {/* <TableListToolbar numSelected={selected.length} onFilterName={handleFilterByName} onUserRole={handleFilterByUserRole} /> */}
       <TableContainer sx={{ minWidth: 800 }}>
         <Table>

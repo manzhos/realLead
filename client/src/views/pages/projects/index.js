@@ -57,7 +57,7 @@ const Projects = () => {
       const res = await request(`${API_URL}/project`, 'GET', null,
         {Authorization: `Bearer ${auth.token}`}
       )
-      console.log('projects:', res.projects)
+      // console.log('projects:', res.projects)
       setProjectList(res.projects)
     } catch(error) { console.log('Error:', error)}
   })
