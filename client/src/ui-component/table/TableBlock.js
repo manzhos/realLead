@@ -134,7 +134,7 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
   }
 
   const Row = ({row, index}) => {
-    console.log('row:', row)
+    // console.log('row:', row)
     const [openSub, setOpenSub] = useState(false)
     // const isItemSelected = selected.indexOf(index) !== -1;
     const [filterName, setFilterName] = useState('')
@@ -142,9 +142,9 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
     if(subItem?.itemList?.length) filteredSubItems = applySortFilter(subItem.itemList, getComparator(order, orderBy), filterName)
 
     const handleRowClick = (data) => {
-      console.log('copied:', data)
       if(parent !== 'project') {
-        navigator.clipboard.writeText(`'${data}'`)
+        console.log('link copied:', data)
+        navigator.clipboard.writeText(data)
         toast("Link copied to clipboard", {
           position: "top-right",
           autoClose: 5000,
