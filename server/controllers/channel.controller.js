@@ -61,7 +61,8 @@ class ChannelController {
     await channel.save()
     // console.log('channel.click:', channel.click)
 
-    res.redirect(channel.linkTo)
+    // res.status(301).redirect(channel.linkTo)
+    res.redirect(301, channel.linkTo)
   }
 }
 
