@@ -87,11 +87,6 @@ const Login = ({ ...others }) => {
 
   return (
     <>
-    <button type="button" onClick={async()=>{
-      const response = await fetch("https://jsonplaceholder.typicode.com/posts")
-      const data = await response.json()
-      console.log(data)
-    }}>click</button>
       { loading
         ? <p>waiting for request...</p>
         : <>    

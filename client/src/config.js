@@ -13,8 +13,8 @@ const config = {
   //production
   // API_URL: 'http://65.109.227.66/api',
   // URL:     'http://65.109.227.66',
-  API_URL: 'https://manzhos.cz/api',
-  URL:     'https://manzhos.cz',
+  API_URL: 'https://rl.manzhos.cz/api',
+  URL:     'https://rl.manzhos.cz',
 };
 
 export default config;
