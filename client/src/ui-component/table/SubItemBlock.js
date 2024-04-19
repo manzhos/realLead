@@ -86,9 +86,8 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
     if(!newChannelData.linkTo || newChannelData.linkTo === '') return
     const channelId = Date.now();
     // check redirect for 'http://' || 'https://'. Without it redirect like additional to local path
-    const linkRegex = /^htt([p,ps]):\/\//;
+    const linkRegex = /^https?:\/\//
     if(!linkRegex.test(newChannelData.linkTo)) newChannelData.linkTo = 'https://' + newChannelData.linkTo
-    // console.log('newChannelData.linkTo', newChannelData.linkTo)
     const linkFrom = `${API_URL}/getfrom?user_id=${auth.userId._id}&project_id=${parentId}&channel_id=${channelId}`
     setNewChannelData({
       ...newChannelData,

@@ -60,7 +60,6 @@ class ChannelController {
     channel.click ? channel.click++ : channel.click = 1
     await channel.save()
     // console.log('channel.click:', channel.click)
-    channel.linkTo = channel.linkTo.replace(/^https?:\/\//, '');
 
     res.redirect(channel.linkTo)
   }
