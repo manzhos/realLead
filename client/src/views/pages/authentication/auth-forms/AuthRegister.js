@@ -279,6 +279,13 @@ const Register = ({ ...others }) => {
                               {level?.label}
                             </Typography>
                           </Grid>
+                          {(level?.label === 'Weak' || level?.label === 'Poor') &&
+                            <Grid item sx={{ width: 1, paddingTop: '0 !important' }}>
+                              <Typography variant="subtitle1" fontSize="0.65rem">
+                                {'Minimal length of password 8 symbols'}
+                              </Typography>
+                            </Grid>
+                          }
                         </Grid>
                       </Box>
                     </FormControl>
