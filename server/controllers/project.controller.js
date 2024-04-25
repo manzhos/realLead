@@ -78,7 +78,6 @@ class ProjectController {
       console.error('Error:', error)
       res.status(500).json({ message:'Something wrong...' })
     }    
-
   }
 
   async deleteProject(req, res){

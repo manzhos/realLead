@@ -36,6 +36,11 @@ const channelSchema = new Schema({
     trim: true,
     required: false,
   },
+  uuid: {
+    type: String,
+    trim: true,
+    required: false,
+  },
   click: {
     type: Number,
     trim: true,

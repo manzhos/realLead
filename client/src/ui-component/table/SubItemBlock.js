@@ -55,7 +55,7 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
 
   const createChannel = async(event) => {
     event.preventDefault()
-    // console.log('newChannelData:', newChannelData)
+    console.log('newChannelData:', newChannelData)
     try {
       const response = await request(`${API_URL}/channel`, 'POST', newChannelData,
         { Authorization: `Bearer ${auth.token}` }
@@ -77,24 +77,24 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
   useEffect(()=>{
     if(
       newChannelData.name     && newChannelData.name      !== '' &&
-      newChannelData.linkTo   && newChannelData.linkTo    !== '' &&
-      newChannelData.linkFrom && newChannelData.linkFrom  !== ''
+      newChannelData.linkTo   && newChannelData.linkTo    !== ''
+      // newChannelData.linkFrom && newChannelData.linkFrom  !== ''
     ) setIsDisable(false)
   }, [{...newChannelData}])
 
-  const generateLinkFrom = () => {
-    if(!newChannelData.linkTo || newChannelData.linkTo === '') return
-    const channelId = Date.now();
-    // check redirect for 'http://' || 'https://'. Without it redirect like additional to local path
-    const linkRegex = /^https?:\/\//
-    if(!linkRegex.test(newChannelData.linkTo)) newChannelData.linkTo = 'https://' + newChannelData.linkTo
-    const linkFrom = `${API_URL}/getfrom?user_id=${auth.userId._id}&project_id=${parentId}&channel_id=${channelId}`
-    setNewChannelData({
-      ...newChannelData,
-      linkFrom: linkFrom,
-      channelId: channelId
-    })
-  }
+  // const generateLinkFrom = () => {
+  //   if(!newChannelData.linkTo || newChannelData.linkTo === '') return
+  //   const channelId = Date.now();
+  //   // check redirect for 'http://' || 'https://'. Without it redirect like additional to local path
+  //   const linkRegex = /^https?:\/\//
+  //   if(!linkRegex.test(newChannelData.linkTo)) newChannelData.linkTo = 'https://' + newChannelData.linkTo
+  //   const linkFrom = `${API_URL}/getfrom?user_id=${auth.userId._id}&project_id=${parentId}&channel_id=${channelId}`
+  //   setNewChannelData({
+  //     ...newChannelData,
+  //     linkFrom: linkFrom,
+  //     channelId: channelId
+  //   })
+  // }
 
 
   return (
@@ -174,7 +174,7 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
                     autoFocus
                     onChange = {(event) => {handleChange(event)}}
                   /> */}
-                  <Button
+                  {/* <Button
                     variant="outlined"
                     sx={{ mb: 2 }}
                     onClick={() => { generateLinkFrom() }}
@@ -185,7 +185,7 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
                     }
                     &nbsp;&nbsp;
                     {'Generate Link for posting'}
-                  </Button>
+                  </Button> */}
                 </Grid>
               </Grid>
               <Button

@@ -17,6 +17,7 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 // page routing
 const Projects = Loadable(lazy(() => import('views/pages/projects')));
 const Channels = Loadable(lazy(() => import('views/pages/channels')));
+const RedirectToApi = Loadable(lazy(() => import('ui-component/RedirectToApi')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -28,6 +29,10 @@ const MainRoutes = {
       path: '/',
       // element: <DashboardDefault />
       element: <Projects />
+    },
+    {
+      path: '/*',
+      element: <RedirectToApi />
     },
     // {
     //   path: 'dashboard',

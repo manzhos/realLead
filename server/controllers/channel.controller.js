@@ -1,13 +1,19 @@
+import ShortUniqueId from 'short-unique-id'
 import Channel from '../models/appModels/Channel.js'
 import Project from '../models/appModels/Project.js'
 
 class ChannelController { 
   async createChannel(req, res){
     console.log('createChannel:', req.body);
-    const { channelId, name, projectId, linkFrom, linkTo} = req.body
-    if(!req.body || !channelId || !name || !projectId) return;
+    let { channelId, name, projectId, linkFrom, linkTo} = req.body
+    const { randomUUID } = new ShortUniqueId({ length: 10 })
+    const uuid = randomUUID()
+    if(!linkFrom) linkFrom = `${process.env.URL}/${uuid}`
+    if(!channelId) channelId = Date.now()
+
+    if(!name || !projectId) return;
     try{
-      const channel = new Channel({ channelId: channelId, name: name, projectId: projectId,  linkFrom: linkFrom, linkTo: linkTo})
+      const channel = new Channel({ channelId: channelId, name: name, projectId: projectId,  linkFrom: linkFrom, linkTo: linkTo, uuid: uuid })
       await channel.save()
       console.log('New channel:', channel)
       return res.status(201).json({ message: 'Channel created', channel: channel })
@@ -23,7 +29,7 @@ class ChannelController {
     const projectId = req.params.project_id
     if(!projectId) return
     try{
-      const channels = await Channel.find({ projectId: projectId })
+      const channels = await Channel.find({ projectId: projectId, removed: false })
       // console.log('channels:', channels);
       return res.status(201).json({ message: 'channels found', channels: channels })
     } catch(error){
@@ -33,15 +39,52 @@ class ChannelController {
   }
 
   async getChannel(req, res){
-    console.log('getChannel');
+    console.log('new click on the link >>> getChannel by UUID :::', req.params);
+    const uuid =  req.params.uuid
+    console.log('uuid:', uuid)
+    if(!uuid) return
+
+    const channel = await Channel.findOne({ uuid: uuid })
+    if(!channel) return res.json({'msg':'no channel yet'})
+    console.log('channel:', channel, '\n', channel.projectId.toHexString())
+    // if(!channel.projectId.toHexString()) return
+    // const project = await Project.findOne({ _id: channel.projectId.toHexString() })
+    // if(!project.ownerId.toHexString()) return
+    channel.click ? channel.click++ : channel.click = 1
+    await channel.save()
+    console.log('channel.click:', channel.click)
+
+    res.redirect(301, channel.linkTo)
   }
 
   async updateChannel(req, res){
-    console.log('updateChannel');
+    console.log('updateChannel:', req.body.name);
+    // console.log('id:', req.params.id);
+    const {id, name} = req.params
+    if(!name || !id) return;
+    try{
+      const channel = await Channel.findByIdAndUpdate(id, { name: name })
+      // console.log('updated project:', project)
+      return res.status(201).json({ message: 'Channel updated', channel: channel })
+    } catch(error){
+      console.error('Error:', error)
+      res.status(500).json({ message:'Something wrong...' })
+    }
   }
 
   async deleteChannel(req, res){
-    console.log('deleteChannel');
+    // console.log('deleteChannel:', req.params)
+    const {id} = req.params
+    if(!id) return
+
+    try{
+      const channel = await Channel.findByIdAndUpdate(id, { removed: true })
+      // console.log('deleted Channel:', channel)
+      return res.status(201).json({ message: 'Channel removed', channel: channel })
+    } catch(error){
+      console.error('Error:', error)
+      res.status(500).json({ message:'Something wrong...' })
+    }
   }
 
   async getTargetLink(req, res){
