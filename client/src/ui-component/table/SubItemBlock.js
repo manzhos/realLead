@@ -1,5 +1,9 @@
-import { useState, useContext, useEffect, useCallback } from 'react'
+import React, { useState, useContext, useEffect, useCallback, Fragment } from 'react'
 import TableBlock from "./TableBlock"
+import { BrowserView, MobileView } from 'react-device-detect'
+// for toast messages
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import { IconRefresh } from '@tabler/icons'
 
@@ -10,24 +14,21 @@ import {
   Grid,
   TextField,
   Card,
-  Stack,
+  Typography,
   Button,
-  IconButton,
-  TableContainer,
+  Modal,
   Table,
   TableBody,
   TableRow,
-  TableCell,
-  TablePagination,
-  Checkbox,
-  Typography,
-  Modal
+  TableCell
 } from '@mui/material'
 
 import { IconCircleCheck } from '@tabler/icons'
 
 import { AuthContext } from 'context/AuthContext'
 import { useHttp } from 'hooks/http.hook'
+import humanDate from 'utils/human-date'
+import SubMenu from './SubMenu'
 import config from 'config.js'
 
 
@@ -47,7 +48,7 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
       const res = await request(`${API_URL}/channels/${parentId}`, 'GET', null,
         {Authorization: `Bearer ${auth.token}`}
       )
-      // console.log('channels:', res)
+      // console.log('channels:', res.channels)
       setChannelList(res.channels)
     } catch(error) { console.log('Error:', error)}
   })
@@ -95,12 +96,72 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
   //     channelId: channelId
   //   })
   // }
-
+  const handleRowClick = (data) => {
+    console.log('link copied:', data)
+    navigator.clipboard.writeText(data)
+    toast("Link copied to clipboard", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
+  } 
 
   return (
-    <>
-      <TableBlock parent={parent} tableHead={tableHead} itemList={channelList} handleUpdate={handleUpdate} />
-      <div style={{ width:"100%", position:"relative" }}>
+    <Fragment>
+      <ToastContainer />
+      <BrowserView>
+        <TableBlock parent={parent} tableHead={tableHead} itemList={channelList} handleUpdate={handleUpdate} />
+      </BrowserView>
+      <MobileView>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                <Box><Typography variant="caption" display="block" gutterBottom><i>Tap on the post link to copy it</i></Typography></Box>
+                { channelList.map((channel, index) => {
+                  return(
+                    <Card key={channel.name + '_' + index} sx={{ pt:1, pb:1, pl:0, pr:0, borderBottom: "1px solid", borderRadius:0, display:"flex", alignItems:"center" }} >
+                      <Box sx={{ width:"75%", overflow:"hidden", display:"flex", flexDirection:"column" }}>
+                        <Box>
+                          <Typography variant="h4" gutterBottom sx={{ color:"#5F36B2" }}>
+                            {channel.name}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ position:"relative" }} onClick={() => { handleRowClick(channel.linkFrom) }}>
+                          <Box sx={{ whiteSpace: "nowrap" }} className='link-for-post'>
+                            {'Post Link:'} <b>{channel.linkFrom}</b>
+                          </Box>
+                        </Box>
+                        <Box>
+                          {'Target Link:'} <b>{channel.linkTo}</b>
+                        </Box>
+                        <Box sx={{ mt:1 }}>
+                          {'From: ' + humanDate(channel.created)}
+                        </Box>
+                      </Box>
+                      <Box sx={{ width:"20%", display:"flex", justifyContent:"center" }}>
+                        <Box sx={{ padding:"6px 12px", border:"0px solid #5F36B2", borderRadius:"16px", background:'#EDE7F6', fontSize:"1.2em", fontWeight:"600" }}>
+                          {channel.click}
+                        </Box>
+                      </Box>
+                      <Box sx={{ width:"5%", display:"flex", justifyContent:"center" }}>
+                        <SubMenu id={'menu' + index} parent={parent} item={channel} onChange={handleUpdate} />
+                      </Box>
+                    </Card> 
+                  )
+                })}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </MobileView>
+
+      <Box sx={{ width:"100%", position:"relative", pl:2, pr:2 }}>
         <Button
           variant="contained"
           size="small"
@@ -112,12 +173,12 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
         <Button
           variant="outlined"
           size="small"
-          sx={{ mt: 3, position:"absolute", right: 0 }}
+          sx={{ mt: 3, position:"absolute", right: 20 }}
           onClick={() => getChannels()}
         >
           <IconRefresh stroke={1.5} size="1.3rem" />{'Update'}
         </Button>
-      </div>
+      </Box> 
 
       <Modal
         open={open}
@@ -126,7 +187,7 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
         aria-describedby="modal-modal-description"
       >
         <Container component="main" maxWidth="md" disableGutters>
-          <Card sx={{ marginTop:'10vh', padding:'30px 50px' }}>
+          <Card sx={{ margin: '10vh 5vw', padding:'30px 50px' }}>
             <Box
               component="form" 
               noValidate 
@@ -200,7 +261,7 @@ const SubItemBlock = ({ parent, parentId, tableHead, handleUpdate }) => {
           </Card>
         </Container>
       </Modal>
-    </>
+    </Fragment>
   )
 }
 export default SubItemBlock;

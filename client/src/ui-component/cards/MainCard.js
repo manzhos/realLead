@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -33,32 +34,44 @@ const MainCard = forwardRef(
     const theme = useTheme();
 
     return (
-      <Card
-        ref={ref}
-        {...others}
-        sx={{
-          border: border ? '1px solid' : 'none',
-          borderColor: theme.palette.primary[200] + 25,
-          ':hover': {
-            boxShadow: boxShadow ? shadow || '0 2px 14px 0 rgb(32 40 45 / 8%)' : 'inherit'
-          },
-          ...sx
-        }}
-      >
-        {/* card header and action */}
-        {title && <CardHeader sx={headerSX} title={darkTitle ? <Typography variant="h3">{title}</Typography> : title} action={secondary} />}
-
-        {/* content & header divider */}
-        {title && <Divider />}
-
-        {/* card content */}
-        {content && (
-          <CardContent sx={contentSX} className={contentClass}>
-            {children}
-          </CardContent>
-        )}
-        {!content && children}
-      </Card>
+      <>
+        <BrowserView>
+          <Card
+            ref={ref}
+            {...others}
+            sx={{
+              border: border ? '1px solid' : 'none',
+              borderColor: theme.palette.primary[200] + 25,
+              ':hover': {
+                boxShadow: boxShadow ? shadow || '0 2px 14px 0 rgb(32 40 45 / 8%)' : 'inherit'
+              },
+              ...sx
+            }}
+          >            
+            {/* card header and action */}
+            {title && <CardHeader sx={headerSX} title={darkTitle ? <Typography variant="h3">{title}</Typography> : title} action={secondary} />}
+            {/* content & header divider */}
+            {title && <Divider />}
+            {/* card content */}
+            {content && (
+              <CardContent sx={contentSX} className={contentClass}>
+                {children}
+              </CardContent>
+            )}
+            {!content && children}
+          </Card>
+        </BrowserView>
+        <MobileView>
+          {title && <CardHeader sx={headerSX} style={{ padding:0 }} title={darkTitle ? <Typography variant="h3">{title}</Typography> : title} action={secondary} />}
+          {title && <Divider sx={{ mt:2, mb:1 }} />}
+          {content && (
+            <CardContent sx={contentSX} style={{ padding:0 }} className={contentClass}>
+              {children}
+            </CardContent>
+          )}
+          {!content && children}
+        </MobileView>
+      </>
     );
   }
 );

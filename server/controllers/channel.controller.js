@@ -39,31 +39,30 @@ class ChannelController {
   }
 
   async getChannel(req, res){
-    console.log('new click on the link >>> getChannel by UUID :::', req.params);
+    // console.log('new click on the link >>> getChannel by UUID :::', req.params);
     const uuid =  req.params.uuid
-    console.log('uuid:', uuid)
     if(!uuid) return
 
     const channel = await Channel.findOne({ uuid: uuid })
     if(!channel) return res.json({'msg':'no channel yet'})
-    console.log('channel:', channel, '\n', channel.projectId.toHexString())
+    // console.log('channel:', channel, '\n', channel.projectId.toHexString())
     // if(!channel.projectId.toHexString()) return
     // const project = await Project.findOne({ _id: channel.projectId.toHexString() })
     // if(!project.ownerId.toHexString()) return
     channel.click ? channel.click++ : channel.click = 1
     await channel.save()
-    console.log('channel.click:', channel.click)
+    // console.log('channel.click:', channel.click)
 
-    res.redirect(301, channel.linkTo)
+    res.status(301).redirect(channel.linkTo)
   }
 
   async updateChannel(req, res){
-    console.log('updateChannel:', req.body.name);
-    // console.log('id:', req.params.id);
-    const {id, name} = req.params
-    if(!name || !id) return;
+    const {id} = req.params
+    const {name, linkTo} = req.body
+    // console.log('updateChannel:', id, name, linkTo);
+    if(!id || !(name && linkTo)) return;
     try{
-      const channel = await Channel.findByIdAndUpdate(id, { name: name })
+      const channel = await Channel.findByIdAndUpdate(id, { name: name, linkTo: linkTo })
       // console.log('updated project:', project)
       return res.status(201).json({ message: 'Channel updated', channel: channel })
     } catch(error){

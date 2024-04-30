@@ -1,6 +1,8 @@
-import { useState, useRef, useContext } from 'react'
+import React, { useState, useRef, useContext } from 'react'
+import { BrowserView, MobileView } from 'react-device-detect'
 // assets
-import { IconDots, IconPencil, IconTrash } from '@tabler/icons'
+import { IconDots, IconDotsVertical, IconPencil, IconTrash } from '@tabler/icons'
+
 
 import { 
   IconButton,
@@ -15,6 +17,7 @@ import { useHttp } from 'hooks/http.hook'
 import config from 'config.js'
 import Popup from 'ui-component/Popup';
 import ProjectEdit from 'ui-component/edit/ProjectEdit';
+import ChannelEdit from 'ui-component/edit/ChannelEdit';
 
 
 const SubMenu = ({ parent, item, onChange }) => {
@@ -67,9 +70,15 @@ const SubMenu = ({ parent, item, onChange }) => {
     <>
       <Popup popupData={popupData} onChoise={(onChoise) => { _handleDelete(onChoise) }} />
       { parent === 'project' && <ProjectEdit editData={editData} onEdit={onEdit} /> }
+      { parent === 'channel' && <ChannelEdit editData={editData} onEdit={onEdit} /> }
 
       <IconButton ref={ref} onClick={() => setSubMenuOpen(true)}>
-        <IconDots stroke={1.5} size="1.3rem" />
+        <BrowserView>
+          <IconDots stroke={1.5} size="1.3rem" />
+        </BrowserView>
+        <MobileView>
+          <IconDotsVertical stroke={1.5} size="1.3rem" />
+        </MobileView>
       </IconButton>
 
       <Menu

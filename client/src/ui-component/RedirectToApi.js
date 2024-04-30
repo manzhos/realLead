@@ -6,7 +6,7 @@ const RedirectToApi = () => {
   const uuidPath = window.location.pathname
 
   useEffect(() => {
-    console.log('Redirect url:', `${config.API_URL}${uuidPath}`)
+    // console.log('Redirect url:', `${config.API_URL}${uuidPath}`)
     window.location.href = `${config.API_URL}${uuidPath}`
   });
 

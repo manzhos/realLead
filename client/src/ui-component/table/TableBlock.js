@@ -1,13 +1,14 @@
-import { useState, Fragment } from 'react'
+import React, { useState, Fragment } from 'react'
 import { filter } from 'lodash'
+import { BrowserView, MobileView } from 'react-device-detect'
 
 import humanDate from 'utils/human-date'
 import SubMenu from './SubMenu'
 import SubItemBlock from 'ui-component/table/SubItemBlock'
 
 // for toast messages
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import { 
   Container,
@@ -28,6 +29,7 @@ import {
   Typography,
   Collapse
 } from '@mui/material';
+import { width } from '@mui/system'
 
 
 // ----------------------------------------------------------------------
@@ -137,9 +139,9 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
     // console.log('row:', row)
     const [openSub, setOpenSub] = useState(false)
     // const isItemSelected = selected.indexOf(index) !== -1;
-    const [filterName, setFilterName] = useState('')
-    let filteredSubItems = []
-    if(subItem?.itemList?.length) filteredSubItems = applySortFilter(subItem.itemList, getComparator(order, orderBy), filterName)
+    // const [filterName, setFilterName] = useState('')
+    // let filteredSubItems = []
+    // if(subItem?.itemList?.length) filteredSubItems = applySortFilter(subItem.itemList, getComparator(order, orderBy), filterName)
 
     const handleRowClick = (data) => {
       if(parent !== 'project') {
@@ -186,7 +188,9 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
                 <div style={{ width: headCell.width, overflow: 'hidden' }}>
                   { headCell.id === 'created' 
                     ? humanDate(row[headCell.id])
-                    : row[headCell.id]
+                    : headCell.id === 'click'
+                      ? <div style={{ paddingLeft:'15px' }}><b>{row[headCell.id]}</b></div>
+                      : row[headCell.id]
                   }
                 </div>
               </TableCell>
@@ -199,8 +203,8 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
         {/* collapsed channel */}
         { subItem?.parent &&
           <TableRow>
-            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-              <Collapse in={ openSub } timeout="auto" unmountOnExit sx={{ mt: 2, mb: 2, background: '#FAF8FE', borderRadius:'12px' }}>
+            <TableCell style={{ padding: 0}} colSpan={6}>
+              <Collapse in={ openSub } timeout="auto" unmountOnExit sx={{ mt: 0, mb: 0, background: '#FdFdFd', boxShadow:'inset 0px 24px 24px -24px #CCC, inset 0px -24px 24px -24px #CCC' }}>
                 <Box sx={{ mt:3, ml:4, mr:4, mb:4 }}>
                   <Typography variant="h4" gutterBottom component="div" sx={{ textTransform: 'capitalize', color: '#6237B1', mb:3 }}>
                     {subItem.parent}
@@ -215,79 +219,150 @@ const TableBlock = ({ parent, tableHead, itemList, subItem, handleUpdate }) => {
     )
   }
 
-  return (
-    <Card>
-      <ToastContainer />
-      {/* <TableListToolbar numSelected={selected.length} onFilterName={handleFilterByName} onUserRole={handleFilterByUserRole} /> */}
-      <TableContainer sx={{ minWidth: 800 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {/* <TableCell padding="checkbox">
-                <Checkbox
-                  indeterminate={numSelected > 0 && numSelected < rowCount}
-                  checked={rowCount > 0 && numSelected === rowCount}
-                  onChange={handleSelectAllClick}
-                />
-              </TableCell> */}
-              {tableHead.map((headCell) => (
-                <TableCell
-                  key={'head-' + headCell.id}
-                  align={headCell.alignRight ? 'right' : 'left'}
-                  sortDirection={orderBy === headCell.id ? order : false}
-                  style={{ width: headCell.width }}
-                >
-                  <TableSortLabel
-                    hideSortIcon
-                    active={orderBy === headCell.id}
-                    direction={orderBy === headCell.id ? order : 'asc'}
-                    onClick={()=>{handleRequestSort(headCell.id)}}
-                  >
-                    {headCell.label}
-                    {orderBy === headCell.id ? (
-                      <Box sx={{ ...visuallyHidden }}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</Box>
-                    ) : null}
-                  </TableSortLabel>
-                </TableCell>
-              ))}
-              <TableCell>&nbsp;</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredItems?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-              return (
-                <Row key={'row' + index} row={row} index={index}/>
-              )
-            })}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
+  const RowMobile = ({row, index}) => {
+    const [openSub, setOpenSub] = useState(false)
 
-          {/* {isProjectNotFound && (
+    const handleRowClick = (data) => {
+      setOpenSub(!openSub)
+    }    
+    return(
+      <Fragment>
+        <Card
+          key={row.name + index}
+          sx={{ pt:2, pb:2, pl:2, pr:2, borderBottom: "1px solid", borderRadius:0, display:"flex", alignItems:"center" }} 
+          onClick={() => { handleRowClick(row.linkFrom) }}
+        >
+          <Box sx={{ width:"75%", display:"flex", flexDirection:"column"}}>
+            <Box>
+              <Typography variant="h4" gutterBottom>
+                {row.name}
+              </Typography>
+            </Box>
+            <Box>
+              {humanDate(row.created)}
+            </Box>
+          </Box>
+          <Box sx={{ width:"20%", display:"flex", justifyContent:"center" }}>
+            <Box sx={{ padding:"12px", border:"0px solid #5F36B2", borderRadius:"20px", background:'#EDE7F6', fontSize:"1.2em", fontWeight:"600" }}>
+              {row.click}
+            </Box>
+          </Box>
+          <Box sx={{ width:"5%", display:"flex", justifyContent:"center" }}>
+            <SubMenu id={'menu' + index} parent={parent} item={row} onChange={handleUpdate} />
+          </Box>
+        </Card> 
+        { subItem?.parent &&
+          <Table>
             <TableBody>
               <TableRow>
-                <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                  <SearchNotFound searchQuery={filterName} />
+                <TableCell style={{ padding: 0}} colSpan={6}>
+                  <Collapse in={ openSub } timeout="auto" unmountOnExit sx={{ mt: 0, mb: 0, background: '#FdFdFd', boxShadow:'inset 0px 24px 24px -24px #CCC, inset 0px -24px 24px -24px #CCC' }}>
+                    <Box sx={{ mt:1, ml:0, mr:0, mb:4 }}>
+                      {/* <Typography variant="h5" gutterBottom component="div" sx={{ textTransform: 'capitalize', color: '#6237B1', mb:1 }}>
+                        {subItem.parent}
+                      </Typography> */}
+                      { subItem.parent && <SubItemBlock parent={subItem.parent} parentId={row._id} tableHead={subItem.tableHead} handleUpdate={handleUpdate} />}
+                    </Box>
+                  </Collapse>
                 </TableCell>
               </TableRow>
             </TableBody>
-          )} */}
-        </Table>
-      </TableContainer>
+          </Table>
+        }  
+      </Fragment>
+    )
+  }
 
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={itemList.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Card>
+  return (
+    <Fragment>
+      <ToastContainer />
+      {/* <TableListToolbar numSelected={selected.length} onFilterName={handleFilterByName} onUserRole={handleFilterByUserRole} /> */}
+      <BrowserView>
+        <TableContainer sx={{ minWidth: 800 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {/* <TableCell padding="checkbox">
+                  <Checkbox
+                    indeterminate={numSelected > 0 && numSelected < rowCount}
+                    checked={rowCount > 0 && numSelected === rowCount}
+                    onChange={handleSelectAllClick}
+                  />
+                </TableCell> */}
+                {tableHead.map((headCell) => (
+                  <TableCell
+                    key={'head-' + headCell.id}
+                    align={headCell.alignRight ? 'right' : 'left'}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                    style={{ width: headCell.width }}
+                  >
+                    <TableSortLabel
+                      hideSortIcon
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? order : 'asc'}
+                      onClick={()=>{handleRequestSort(headCell.id)}}
+                    >
+                      { headCell.label }
+                      {orderBy === headCell.id ? (
+                        <Box sx={{ ...visuallyHidden }}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</Box>
+                      ) : null}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+                <TableCell>&nbsp;</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredItems?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                return (
+                  <Row key={'row' + index} row={row} index={index}/>
+                )
+              })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+
+            {/* {isProjectNotFound && (
+              <TableBody>
+                <TableRow>
+                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                    <SearchNotFound searchQuery={filterName} />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            )} */}
+          </Table>
+        </TableContainer>
+
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={itemList.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </BrowserView>
+      <MobileView>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell sx={{ padding:0 }}>
+                {filteredItems?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                  return (
+                    <RowMobile key={'row' + index} row={row} index={index}/>
+                  )
+                })}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </MobileView>
+    </Fragment>
   )
 }
 export default TableBlock;

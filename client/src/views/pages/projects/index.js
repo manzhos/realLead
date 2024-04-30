@@ -99,56 +99,54 @@ const Projects = () => {
   return(
     <MainCard title="Projects" sx={{ height:"99%", mt:2, }}>
       <TableBlock parent='project' tableHead={TABLE_HEAD} itemList={projectList} subItem={{ parent:'channel', tableHead:TABLE_SUB_HEAD }} handleUpdate={onTableChange} />
-      {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5} sx={{ position: "absolute", bottom: 0}}> */}
-        <Button color="secondary" variant="contained" onClick={handleNewProjectOpen}>
-          Add Project
-        </Button>
-        {/* add new project */}
-        <Modal
-          open={newProjectOpen}
-          onClose={handleNewProjectClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Container component="main" maxWidth="md" disableGutters>
-            <Card sx={{ marginTop:'10vh', padding:'30px 50px' }}>
-              <Box
-                component="form" 
-                noValidate 
-                onSubmit={createProject}
-                sx={{
-                  mt: 3,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={12}>
-                    <TextField
-                      name="projectName"
-                      fullWidth
-                      required
-                      id="projectName"
-                      value={projectName}
-                      label="Project Name"
-                      autoFocus
-                      onChange = {(event) => {handleChange(event.target.value)}}
-                    />
-                  </Grid>
+      <Button color="secondary" variant="contained" sx={{ mt:2 }} onClick={handleNewProjectOpen}>
+        Add Project
+      </Button>
+      {/* add new project */}
+      <Modal
+        open={newProjectOpen}
+        onClose={handleNewProjectClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Container component="main" maxWidth="md" disableGutters>
+          <Card sx={{ margin: '10vh 5vw', padding:'30px 50px' }}>
+            <Box
+              component="form" 
+              noValidate 
+              onSubmit={createProject}
+              sx={{
+                mt: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12}>
+                  <TextField
+                    name="projectName"
+                    fullWidth
+                    required
+                    id="projectName"
+                    value={projectName}
+                    label="Project Name"
+                    autoFocus
+                    onChange = {(event) => {handleChange(event.target.value)}}
+                  />
                 </Grid>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Create project
-                </Button>
-              </Box>
-            </Card>
-          </Container>
-        </Modal>
-      {/* </Stack> */}
+              </Grid>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Create project
+              </Button>
+            </Box>
+          </Card>
+        </Container>
+      </Modal>
     </MainCard>
   )
 }
