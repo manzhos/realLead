@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect, useCallback } from 'react'
+import { io } from 'socket.io-client'
 
 // material-ui
 import { 
@@ -18,12 +19,12 @@ import {
   Checkbox,
   Typography,
   Modal
-} from '@mui/material';
+} from '@mui/material'
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import TableBlock from 'ui-component/table/TableBlock';
-import { AuthContext } from 'context/AuthContext';
+import MainCard from 'ui-component/cards/MainCard'
+import TableBlock from 'ui-component/table/TableBlock'
+import { AuthContext } from 'context/AuthContext'
 import { useHttp } from 'hooks/http.hook'
 import config from 'config.js'
 
@@ -42,6 +43,8 @@ const TABLE_SUB_HEAD = [
   { id: 'click',     label: 'CLICK\'s',         alignRight: false },
 ];
 
+const socket = io('ws://localhost:3330')
+console.log(socket)
 
 const Projects = () => {
   const [projectName, setProjectName] = useState('')
@@ -51,6 +54,13 @@ const Projects = () => {
   const auth = useContext(AuthContext)
   const API_URL = config.API_URL
   const {loading, request, error, clearError} = useHttp()
+
+  //receive message
+  socket.on("hello", (arg)=>{
+    console.log('Socket recieved <!!!> :::', arg)
+  });
+  // send message
+  socket.emit("howdy", "man")
   
   const getProjects = useCallback( async () => {
     try {
